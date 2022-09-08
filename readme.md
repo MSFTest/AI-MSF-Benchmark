@@ -6,6 +6,18 @@ This repository the code of the paper "An Empirical Study of AI-enabled Multi-Se
 
 ![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/workflow.png)
 
+**corruption**
+![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/rain.gif)
+
+We leverage fourteen common corruption patterns to synthesize corrupted data that could possibly occur in the operational environments to evaluate MSF systems’ robustness. 
+these corruption patterns can be naturally grouped into four categories: weather corruption, sensor corruption, noise corruption, and sensor misalignment.
+we visualize the corruption patterns in this [link](https://sites.google.com/view/ai-msf-benchmark/corruption-pattern).
+
+**AI-enabled MSF systems**
+we summarizes the seven MSF systems used in our benchmark in this [link](https://sites.google.com/view/ai-msf-benchmark/benchmark).
+These seven systems cover three different tasks and three different fusion mechanisms
+
+
 ## Installation
 
 We implement all the MSF systems with PyTorch 1.8.0 and Python 3.7.11. All experiments are conducted on a server with an Intel i7-10700K CPU (3.80 GHz), 48 GB RAM, and an NVIDIA GeForce RTX 3070 GPU (8 GB VRAM). 
