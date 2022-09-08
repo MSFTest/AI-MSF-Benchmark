@@ -1,0 +1,27 @@
+# ninja log v5
+0	1279	1653448541871506468	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/iou3d/src/iou3d_kernel.o	a035c4d92275d389
+0	12777	1653448553363420144	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/iou3d/src/iou3d.o	da12dbada908ac03
+0	6062	1653448559907371264	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/group_points.o	fff8687e8875d208
+0	6408	1653448560251368705	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/sampling.o	ab7b401bcf769e3d
+1	6971	1653448560815364497	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/interpolate.o	1c9545c2c8eee206
+0	7580	1653448561423359973	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/ball_query.o	70d7fff596193a43
+1	15015	1653448568863304699	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/group_points_gpu.o	594765dc877e9c05
+2	15456	1653448569303301439	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/sampling_gpu.o	440b1fe1266d4de3
+2	15602	1653448569447300372	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/interpolate_gpu.o	8425e9f1f4c44a97
+0	16075	1653448569923296845	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/ball_query_gpu.o	83d61d2530711846
+0	16443	1653448570287294149	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/pointnet2_api.o	6815c7334bbbbea4
+0	436	1653448571235287131	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/roipool3d/src/roipool3d_kernel.o	2753001d4c9c3310
+0	13106	1653448583899193772	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/roipool3d/src/roipool3d.o	c24bdad861dadad9
+1	1208	1656923128204948488	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/iou3d/src/iou3d_kernel.o	6f48d675c2230d17
+1	12138	1656923139132904017	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/iou3d/src/iou3d.o	deaa097bade156c8
+6	5380	1656923144980880220	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/interpolate.o	dea61fd4a88892e9
+6	5617	1656923145220879244	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/sampling.o	14e8a1b07302ad35
+6	6336	1656923145940876314	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/group_points.o	be0da632c4ed3d91
+6	7074	1656923146676873320	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/ball_query.o	999456927252569c
+6	14208	1656923153808844304	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/group_points_gpu.o	c6797868a15b0f95
+6	14578	1656923154180842791	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/ball_query_gpu.o	ae32e0f2c0efee47
+6	14684	1656923154284842367	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/interpolate_gpu.o	6d94a89c5462e4da
+7	15001	1656923154604841065	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/sampling_gpu.o	59a4086167e1f58d
+6	15584	1656923155184838705	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/pointnet2/src/pointnet2_api.o	1e4e7520f708ad23
+1	401	1656923156060835140	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/roipool3d/src/roipool3d_kernel.o	1ad10a2e0100e422
+1	12601	1656923168260785515	/home/niangao/disk1/JMODT/build/temp.linux-x86_64-3.7/jmodt/ops/roipool3d/src/roipool3d.o	4238c51178d8abb4

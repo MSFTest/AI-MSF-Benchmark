@@ -1,0 +1,8 @@
+numpy
+scipy
+opencv-python
+wand
+natsort
+tqdm
+skimage
+fire

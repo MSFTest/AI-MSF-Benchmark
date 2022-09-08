@@ -1,0 +1,15 @@
+<sim statslevel="1" version="12.3">
+<parameters>
+<sim duration="18446744068709551616" hz="2000" />
+<particles hz="0">
+<emitter type="rain" fallrate="20" sMin="0.001" sMax="0.01" initVelocity="1" originMin="[0 4 -172.824]" originMax="[3 4 -138.875]" dsd="Marshall and Palmer 1948" dsdGamma="n0=8000;mu=0;lambda=2.18558" />
+</particles>
+<cameras>
+<camera idx="0" hz="10" fps="10" exposureTime="2000000" size="[1242 375]" focal="0.006" ccdSize="[1242 375]" ccdPxlSize="4.65e-06" motionSpeed="100" outLatency="0" />
+</cameras>
+<projectors>
+<projector idx="0" hz="0" size="[1242 375]" minPixelOverlay="0.5" outLatency="0" />
+</projectors>
+<processing detErrorMargin="0" detLatencyFrames="0" />
+</parameters>
+</sim>

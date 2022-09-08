@@ -1,0 +1,3 @@
+# ninja log v5
+0	7726	1646290393860376870	/home/niangao/PycharmProjects/fusion/frustum-convnet/ops/query_depth_point/build/temp.linux-x86_64-3.7/query_depth_point_cuda_kernel.o	1d58e7e01d0ec13c
+0	12528	1646290398664320501	/home/niangao/PycharmProjects/fusion/frustum-convnet/ops/query_depth_point/build/temp.linux-x86_64-3.7/query_depth_point_cuda.o	c25b9155312ac754

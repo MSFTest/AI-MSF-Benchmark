@@ -1,0 +1,12 @@
+numpy
+torch>=1.5
+numba
+easydict
+pyyaml
+scipy
+fire
+ortools
+filterpy
+munkres
+tqdm
+tensorboardX
