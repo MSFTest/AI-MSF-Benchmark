@@ -69,7 +69,9 @@ The corruption patterns we offer can be used separately.  Applying corruption op
 Run the following command to synthesize corruption image:
 ```
 python -m corruption.main simulate_image --input_dir "input path" --output_dir "output path" --corruption {corruption} --sev {severity level}
+```
 Similarly, we also provide commands for synthesizing other types of corruption data
+```
 python -m simulate_image/simulate_lidar/simulate_calib/simulate_weather/simulate_delay params1 ... prams2 ...
 ```
 
