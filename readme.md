@@ -63,9 +63,12 @@ AI-MSF-Benchmark
 
 ## Usage
 
-Synthesize Corrupted Dataset
+### Synthesize Corrupted Dataset
 Synthesize corrupted data for KITTI object detection dataset.
-The corruption patterns we offer can be used separately.  Applying corruption operators to a clean dataset (e.g. KITTI) can synthesize realistic corrupted dataset Note that corruption patterns used in this study can also generalize to other datasets, such as Waymo, NuScenes. 
+
+Applying corruption operators to a clean dataset (e.g. KITTI) can synthesize realistic corrupted dataset.
+Note that corruption patterns used in this study can also generalize to other datasets, such as Waymo, NuScenes. 
+The corruption patterns we offer can be used separately. 
 
 Run the following command to synthesize corruption image:
 ```
