@@ -132,8 +132,8 @@ In order to reproduce our experiments(RQ1, RQ2, RQ3), you should
 In order to reproduce RQ4, for CLOCs-Rb, run `tools/aggerate_bounding_box.py` to aggregate high confidence and unique results from an individual branch to the fusion results. For FConv,  you should 
 Generate the 2D front view images of rgb images. 
 1. Train a 2D detector on 2D front view images.
-2. copy Second from `AI-MSF-benchmark/system/CLOCs/second` to `AI-MSF-benchmark/ops/second`.
-3. run `tools/aggerate_bounding_box.py` to aggregate guidance from different branch.
+2. Copy Second from `AI-MSF-benchmark/system/CLOCs/second` to `AI-MSF-benchmark/ops/second`.
+3. Run `tools/aggerate_bounding_box.py` to aggregate guidance from different branch.
 
 ## Reults
 ![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/RQ1_radar.png)
