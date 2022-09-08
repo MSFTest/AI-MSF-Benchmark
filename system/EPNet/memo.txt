@@ -1,0 +1,77 @@
+pytorch > 1.5.0
+1.bash build_and_install.sh
+嗨@HugoHann，
+我正在使用 pytorch 1.7.0、python 3.7.10、ubuntu 18.04。
+当我克隆这个 repo 并运行python setup.py install时，我也遇到了错误AT_CHECK。经过搜索，我发现它被替换为TORCH_CHECK（daniilidis-group/neural_renderer#86）。为了解决这个问题，我将第 10 行和第 11 行修改pointnet2/src/ball_query.cpp为
+
+#define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x, " must be a CUDAtensor ")
+#define CHECK_CONTIGUOUS(x) TORCH_CHECK(x.is_contiguous(), #x, " must be contiguous ")
+一旦我编译，我得到错误说出THCState_getCurrentStream is not defined in this scope现在多个文件中。我在这里找到了解决方案（ptrblck 的答案）。我所做的是更换线路
+
+cudaStream_t stream = THCState_getCurrentStream(state);
+在ball_query.cpp, group_points.cpp,sampling.cpp和interpolate.cpp_
+
+cudaStream_t   stream = at::cuda::getCurrentCUDAStream().stream();
+在此之后，您应该能够编译python setup.py install
+
+1. model dir path
+EPNet/tools/log/Car/models/full_epnet_without_iou_branch/ckpt
+
+
+2. env
+pip install easydict
+
+3. yaml
+TypeError: load() missing 1 required positional argument: 'Loader'
+yaml.load ==> yaml.safe_load
+
+4. data
+make soft link
+begin
+ln -s  /home/niangao/KITTI_DATASET_ROOT/training /home/niangao/PycharmProjects/fusion/EPNet/data/KITTI/object/training
+ln -s  /home/niangao/KITTI_DATASET_ROOT/testing /home/niangao/PycharmProjects/fusion/EPNet/data/KITTI/object/testing
+L-gauss
+ln -s  /home/niangao/gaussian_KITTI_DATASET_ROOT/training /home/niangao/PycharmProjects/fusion/EPNet/data/KITTI/object/training
+
+
+
+
+2022-03-05 12:32:51,462   INFO  Car AP@0.70, 0.70, 0.70:
+bbox AP:98.5776, 94.0951, 92.0913
+bev  AP:95.9569, 88.8481, 88.5248
+3d   AP:92.2567, 82.6962, 80.1370
+aos  AP:98.44, 93.65, 91.45
+Car AP@0.70, 0.50, 0.50:
+bbox AP:98.5776, 94.0951, 92.0913
+bev  AP:98.5900, 94.5340, 94.3101
+3d   AP:98.5769, 94.4754, 94.1481
+aos  AP:98.44, 93.65, 91.45
+
+kitti_rcnn_dataset  line 338
+           if self.npoints > len(pts_rect):
+                    if self.npoints - len(pts_rect) < len(choice):
+                        extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=False)
+                    else:
+                        print("self.npoints - len(pts_rect)", self.npoints - len(pts_rect), "choice", choice)
+                    choice = np.concatenate((choice, extra_choice), axis=0)
+
+
+if self.npoints < len(pts_rect):
+    pts_depth = pts_rect[:, 2]
+    pts_near_flag = pts_depth < 40.0
+    far_idxs_choice = np.where(pts_near_flag == 0)[0]
+    near_idxs = np.where(pts_near_flag == 1)[0]
+    near_idxs_choice = np.random.choice(near_idxs, self.npoints - len(far_idxs_choice), replace=False)
+
+    choice = np.concatenate((near_idxs_choice, far_idxs_choice), axis=0) \
+        if len(far_idxs_choice) > 0 else near_idxs_choice
+    np.random.shuffle(choice)
+else:
+    choice = np.arange(0, len(pts_rect), dtype=np.int32)
+    if self.npoints > len(pts_rect):
+        if self.npoints - len(pts_rect) < len(choice):
+            extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=False)
+            choice = np.concatenate((choice, extra_choice), axis=0)
+        else:
+            print("self.npoints - len(pts_rect)", self.npoints - len(pts_rect), "choice", choice)
+    np.random.shuffle(choice)

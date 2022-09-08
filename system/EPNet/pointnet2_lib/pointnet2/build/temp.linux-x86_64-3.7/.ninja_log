@@ -1,0 +1,10 @@
+# ninja log v5
+0	16140	1646445618975256340	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/ball_query_gpu.o	f43a51b479bdd26c
+1	16253	1646445619091255954	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/group_points_gpu.o	5d6f3a1e32d2d690
+2	16977	1646445619815253550	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/interpolate_gpu.o	561b2d6e6f382cc3
+2	17722	1646445620559251061	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/sampling_gpu.o	c9dafd5ad1eccd19
+0	18912	1646445621747247066	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/pointnet2_api.o	48f5f6fcf3a6f77e
+2	4538	1646447506369738056	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/interpolate.o	ec24638ce8df3f7
+2	4604	1646447506437737665	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/group_points.o	47b46048918b8c77
+2	5064	1646447506897735025	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/sampling.o	ce0a7cf440be8e0c
+2	4247	1646447699160653224	/home/niangao/PycharmProjects/fusion/EPNet/pointnet2_lib/pointnet2/build/temp.linux-x86_64-3.7/src/ball_query.o	333d733a32cb93d1
