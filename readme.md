@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```
 If you need to synthesize rain and fog, you need to install the following dependencies
 For synthesize realistic images of rain and fog, you need to install the dependencies in this repository. [link](https://github.com/cv-rits/rain-rendering)
-- optional : git clone this repository and move to AI-MSF-Benchmark/corruption/3rd_parts/camera/
+- optional : git clone the repository and move to AI-MSF-Benchmark/corruption/3rd_parts/camera/
 - Install dependencies  
 - generate depth maps 
 - download particles simulation files
@@ -42,7 +42,7 @@ corruption/3rd_parts/camera/data/source/kitti/data_object/training/image_2/depth
 corruption/3rd_parts/camera/data/source/particles/kitti/data_object/rain/10mm/*.xml               # Particles simulation files (here, 10mm/hr rain)
 ```
 For synthesize realistic point cloud of rain and fog, you need to install the dependencies in this repository. [link](https://github.com/velatkilic/LISA)
-- optional : git clone this repository and move to AI-MSF-Benchmark/corruption/3rd_parts/lidar/
+- optional : git clone the repository and move to AI-MSF-Benchmark/corruption/3rd_parts/lidar/
 - Install dependencies 
 
 ### Install MSF-based Systems 
