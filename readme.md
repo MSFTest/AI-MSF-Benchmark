@@ -76,6 +76,7 @@ python -m simulate_image/simulate_lidar/simulate_calib/simulate_weather/simulate
 ```
 
 Here are some examples:
+
 Add brightness with a severity level of 3 to the image.
 ```
 python -m corruption.main simulate_image \
