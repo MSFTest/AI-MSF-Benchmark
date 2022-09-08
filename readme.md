@@ -4,7 +4,7 @@ This repository the code of the paper "An Empirical Study of AI-enabled Multi-Se
 
 [[website]](https://sites.google.com/view/ai-msf-benchmark/)
 
-![](https://github.com/SATE-Lab/ATS/blob/master/src/workflow.png)
+![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/workflow.png)
 
 ## Installation
 
@@ -115,6 +115,7 @@ Generate the 2D front view images of rgb images.
 1. Train a 2D detector on 2D front view images.
 2. copy Second from `AI-MSF-benchmark/system/CLOCs/second` to `AI-MSF-benchmark/ops/second`.
 3. run `tools/aggerate_bounding_box.py` to aggregate guidance from different branch.
+
 
 ## Citation
 
