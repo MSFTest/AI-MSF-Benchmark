@@ -8,6 +8,8 @@ This repository the code of the paper "An Empirical Study of AI-enabled Multi-Se
 
 ## Installation
 
+We implement all the MSF systems with PyTorch 1.8.0 and Python 3.7.11. All experiments are conducted on a server with an Intel i7-10700K CPU (3.80 GHz), 48 GB RAM, and an NVIDIA GeForce RTX 3070 GPU (8 GB VRAM). 
+
 ### Corruption Patterns Dependency
 Run the following command to install the dependencies
 ```
@@ -32,11 +34,9 @@ For synthesize realistic point cloud of rain and fog, you need to install the de
 
 ### Install MSF-based Systems 
 In order to reproduce our experiments, we need to carefully configure the environment for each system.
-The details are in [link](https://sites.google.com/view/ai-msf-benchmark/replication-package)
+The details are [here](https://sites.google.com/view/ai-msf-benchmark/replication-package)
 
 ## The structure of the repository 
-
-We implement all the MSF systems with PyTorch 1.8.0 and Python 3.7.11. All experiments are conducted on a server with an Intel i7-10700K CPU (3.80 GHz), 48 GB RAM, and an NVIDIA GeForce RTX 3070 GPU (8 GB VRAM). 
 
 Folder Structure:
 
@@ -116,6 +116,8 @@ Generate the 2D front view images of rgb images.
 2. copy Second from `AI-MSF-benchmark/system/CLOCs/second` to `AI-MSF-benchmark/ops/second`.
 3. run `tools/aggerate_bounding_box.py` to aggregate guidance from different branch.
 
+## Reults
+![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/RQ1_radar.png)
 
 ## Citation
 
