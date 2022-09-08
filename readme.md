@@ -116,7 +116,7 @@ python -m corruption.main simulate_weather \
 --depthdir "./corruption/example/input_dir/depth" \
 --corruption "rain" --sev 1
 ```
-from corruption/corruption_configs.py to get all the corruption.
+Refer to corruption/corruption_configs.py learn more about the corruptions.
 
 ### Evaluate MSF-based Systems 
 
