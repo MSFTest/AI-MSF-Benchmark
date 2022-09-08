@@ -1,6 +1,6 @@
 # AI-MSF-Benchmark
 
-This repository provides the code of the paper "An Empirical Study of AI-enabled Multi-Sensor Fusion Based Perception Systems"
+This repository provides the code of the paper "**An Empirical Study of AI-enabled Multi-Sensor Fusion Based Perception Systems**"
 
 [[website]](https://sites.google.com/view/ai-msf-benchmark/)
 
