@@ -54,8 +54,8 @@ Folder Structure:
 
 ```
 AI-MSF-Benchmark
-|-system seven AI-enabled MSF-based perception systems
-|-corruption  fourteen corruption patterns
+|-system            seven AI-enabled MSF-based perception systems
+|-corruption        fourteen corruption patterns
 |-utils
 |-tools
 ```
