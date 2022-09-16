@@ -35,7 +35,7 @@ For synthesize realistic images of rain and fog, you need to install the depende
 - Install dependencies  
 - generate depth maps 
 - download particles simulation files
-- construct datasets to the requirement format.
+- construct datasets to the required format.
 ```
 corruption/3rd_parts/camera/data/source/kitti/data_object/training/image_2/file0001.png           # Source images (color, 8 bits)
 corruption/3rd_parts/camera/data/source/kitti/data_object/training/image_2/depth/file0001.png     # Depth images (16 bits, with depth_in_meter = depth/256.)
@@ -135,7 +135,7 @@ Generate the 2D front view images of rgb images.
 2. Copy Second from `AI-MSF-benchmark/system/CLOCs/second` to `AI-MSF-benchmark/ops/second`.
 3. Run `tools/aggerate_bounding_box.py` to aggregate guidance from different branch.
 
-## Reults
+## Results
 ![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/RQ1_radar.png)
 
 ## Citation
