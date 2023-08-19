@@ -37,6 +37,7 @@ from utils.utils import get_accuracy, AverageMeter, import_from_file, get_logger
 
 from datasets.dataset_info import DATASET_INFO
 
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Train a network with Detectron'
@@ -47,6 +48,11 @@ def parse_args():
         help='Config file for training (and optionally testing)',
         default=None,
         type=str
+    )
+    parser.add_argument(
+        '--stage',
+        default=None,
+        type=int
     )
     parser.add_argument(
         'opts',
@@ -89,7 +95,6 @@ def get_bn_decay(epoch):
 
 
 def train(data_loader, model, optimizer, lr_scheduler, epoch, logger=None):
-
     data_time_meter = AverageMeter()
     batch_time_meter = AverageMeter()
 
@@ -215,6 +220,7 @@ def main():
 
     assert_and_infer_cfg()
 
+    # TODO: ..... how to load pertrain model
     if not os.path.exists(cfg.OUTPUT_DIR):
         os.makedirs(cfg.OUTPUT_DIR)
 
@@ -285,7 +291,6 @@ def main():
         drop_last=False,
         collate_fn=collate_fn)
 
-
     logging.info('training: sample {} / batch {} '.format(len(train_dataset), len(train_loader)))
     logging.info('validation: sample {} / batch {} '.format(len(val_dataset), len(val_loader)))
 
@@ -298,7 +303,7 @@ def main():
     dataset_name = cfg.DATA.DATASET_NAME
     assert dataset_name in DATASET_INFO
     datset_category_info = DATASET_INFO[dataset_name]
-    NUM_VEC = len(datset_category_info.CLASSES) # rgb category as extra feature vector
+    NUM_VEC = len(datset_category_info.CLASSES)  # rgb category as extra feature vector
     NUM_CLASSES = cfg.MODEL.NUM_CLASSES
 
     model = model_def(input_channels, num_vec=NUM_VEC, num_classes=NUM_CLASSES)
@@ -343,6 +348,14 @@ def main():
     start_epoch = 0
     # optionally resume from a checkpoint
     if cfg.RESUME:
+        if stage==1:
+            cfg.TRAIN.WEIGHTS = '/home/niangao/disk1/_PycharmProjects/PycharmProjects/Multimodality/system/FConv/' \
+                                'pretrained_models/car/model_0050.pth'
+        elif stage==2:
+            cfg.TRAIN.WEIGHTS = '/home/niangao/disk1/_PycharmProjects/PycharmProjects/Multimodality/system/FConv/' \
+                                'pretrained_models/car_refine/model_0050.pth'
+        else:
+            raise ValueError()
         if os.path.isfile(cfg.TRAIN.WEIGHTS):
             checkpoint = torch.load(cfg.TRAIN.WEIGHTS)
             start_epoch = checkpoint['epoch']
@@ -352,6 +365,7 @@ def main():
             optimizer.load_state_dict(checkpoint['optimizer'])
             logger.info("=> loaded checkpoint '{}' (epoch {})".format(cfg.TRAIN.WEIGHTS, checkpoint['epoch']))
         else:
+            assert 1 == 2
             logger.error("=> no checkpoint found at '{}'".format(cfg.TRAIN.WEIGHTS))
 
         # resume from other pretrained model

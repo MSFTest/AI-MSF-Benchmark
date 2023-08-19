@@ -114,7 +114,10 @@ def train(config_path,
           display_step=50,
           summary_step=5,
           pickle_result=True,
-          patchs=None):
+          patchs=None,
+          # ckpt_path=None
+          pretrain_model_dir =None
+          ):
     torch.manual_seed(3)
     np.random.seed(3)
     if create_folder:
@@ -143,8 +146,14 @@ def train(config_path,
     target_assigner = target_assigner_builder.build(target_assigner_cfg,
                                                     bv_range, box_coder)
     class_names = target_assigner.classes
-    net = build_inference_net('./configs/car.fhd.config', '../model_dir')
+    print("load second")  #TODO:
+    net = build_inference_net(config_path,
+                              '/home/niangao/disk1/_PycharmProjects/PycharmProjects/Multimodality/system/CLOCs/model_dir')
+
     fusion_layer = fusion.fusion()
+    print("load fusion")
+    # torchplus.train.restore(ckpt_path, fusion_layer)
+    torchplus.train.try_restore_latest_checkpoints(pretrain_model_dir, [fusion_layer]) #TODO:
     fusion_layer.cuda()
     optimizer_cfg = train_cfg.optimizer
     if train_cfg.enable_mixed_precision:
@@ -233,8 +242,11 @@ def train(config_path,
     if train_cfg.steps % train_cfg.steps_per_eval == 0:
         total_loop -= 1
     mixed_optimizer.zero_grad()
+    total_loop = 1  # mark
+    print("############################# train")
     try:
         for _ in range(total_loop):
+            print("************** cur loop", _)
             if total_step_elapsed + train_cfg.steps_per_eval > train_cfg.steps:
                 steps = train_cfg.steps % train_cfg.steps_per_eval
             else:
@@ -346,7 +358,7 @@ def train(config_path,
                     dt_annos += dt_annos_i
                     val_loss_final = val_loss_final + val_losses
                 else:
-                    _predict_kitti_to_file(net, detection_2d_path, fusion_layer,example, result_path_step,
+                    _predict_kitti_to_file(net, detection_2d_path, fusion_layer, example, result_path_step,
                                            class_names, center_limit_range,
                                            model_cfg.lidar_input)
 
@@ -369,24 +381,24 @@ def train(config_path,
             print(result, file=logf)
             print(result)
             writer.add_text('eval_result', json.dumps(result, indent=2), global_step)
-            result = get_coco_eval_result(gt_annos, dt_annos, class_names)
-            print(result, file=logf)
-            print(result)
-            if pickle_result:
-                with open(result_path_step / "result.pkl", 'wb') as f:
-                    pickle.dump(dt_annos, f)
-            writer.add_text('eval_result', result, global_step)
+            # result = get_coco_eval_result(gt_annos, dt_annos, class_names)
+            # print(result, file=logf)
+            # print(result)
+            # if pickle_result:
+            #     with open(result_path_step / "result.pkl", 'wb') as f:
+            #         pickle.dump(dt_annos, f)
+            # writer.add_text('eval_result', result, global_step)
             # net.train()
             fusion_layer.train()
     except Exception as e:
 
-        torchplus.train.save_models(model_dir, [fusion_layer, optimizer],
+        torchplus.train.save_models(model_dir, [fusion_layer, optimizer, net],
                                     net.get_global_step())
 
         logf.close()
         raise e
     # save model before exit
-
+    print(f"==================,save to {model_dir}")
     torchplus.train.save_models(model_dir, [fusion_layer, optimizer],
                                 net.get_global_step())
 
@@ -586,6 +598,7 @@ def predict_kitti_to_anno(net,
 
 def evaluate(config_path,
              model_dir,
+             eval_map=True,
              result_path=None,
              predict_test=False,
              ckpt_path=None,
@@ -624,14 +637,15 @@ def evaluate(config_path,
                                                     bv_range, box_coder)
     class_names = target_assigner.classes
     # this one is used for training car detector
-    net = build_inference_net('/home/niangao/PycharmProjects/fusion/CLOCs/second/configs/car.fhd.config',
-                              '/home/niangao/PycharmProjects/fusion/CLOCs/model_dir')
+    net = build_inference_net(config_path,
+                              '/home/niangao/disk1/_PycharmProjects/PycharmProjects/Multimodality/system/CLOCs/model_dir')
     fusion_layer = fusion.fusion()
     fusion_layer.cuda()
     net.cuda()
     ############ restore parameters for fusion layer
     if ckpt_path is None:
         print("load existing model for fusion layer")
+        # print(model_dir,"========")
         torchplus.train.try_restore_latest_checkpoints(model_dir, [fusion_layer])
     else:
         torchplus.train.restore(ckpt_path, fusion_layer)
@@ -661,6 +675,8 @@ def evaluate(config_path,
 
     net.eval()
     fusion_layer.eval()
+    if net.get_global_step() == 0:
+        raise ValueError("****************", net.get_global_step(), "****************")
     result_path_step = result_path / f"step_{net.get_global_step()}"
     result_path_step.mkdir(parents=True, exist_ok=True)
     t = time.time()
@@ -695,7 +711,8 @@ def evaluate(config_path,
         bar.print_bar()
         if measure_time:
             t2 = time.time()
-
+    if not eval_map:
+        return
     sec_per_example = len(eval_dataset) / (time.time() - t)
     print(f'generate label finished({sec_per_example:.2f}/s). start eval:')
     print("validation_loss:", val_loss_final / len(eval_dataloader))
@@ -708,6 +725,9 @@ def evaluate(config_path,
         gt_annos = [info["annos"] for info in eval_dataset.dataset.kitti_infos]
         if not pickle_result:
             dt_annos = kitti.get_label_annos(result_path_step)
+        # print(gt_annos, dt_annos)
+        # print(len(gt_annos), len(dt_annos))
+        # print("====================================")
         result = get_official_eval_result(gt_annos, dt_annos, class_names)
         # print(json.dumps(result, indent=2))
         print(result)

@@ -25,7 +25,7 @@ class PointRCNN(nn.Module):
                 raise NotImplementedError
 
     def forward(self, input_data):
-
+        print("==========%%%%%%%%================")
         if cfg.RPN.ENABLED:
             output = {}
             # rpn inference
@@ -36,7 +36,7 @@ class PointRCNN(nn.Module):
                 output.update(rpn_output)
                 backbone_xyz = rpn_output['backbone_xyz']
                 backbone_features = rpn_output['backbone_features']
-
+                print("==========%%%%%%%%================", backbone_features.shape)
             # rcnn inference
             if cfg.RCNN.ENABLED:
                 with torch.no_grad():
@@ -72,6 +72,18 @@ class PointRCNN(nn.Module):
             raise NotImplementedError
 
         return output
+
+    def forward_features(self, input_data):
+        output = {}
+        # rpn inference
+        with torch.set_grad_enabled((not cfg.RPN.FIXED) and self.training):
+            if cfg.RPN.FIXED:
+                self.rpn.eval()
+            rpn_output = self.rpn(input_data)
+            output.update(rpn_output)
+            backbone_xyz = rpn_output['backbone_xyz']
+            backbone_features = rpn_output['backbone_features']
+            return backbone_features
 
     def forward_with_grad(self, input_data):
         if cfg.RPN.ENABLED:

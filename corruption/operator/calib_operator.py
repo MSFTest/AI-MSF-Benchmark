@@ -23,7 +23,6 @@ class CalibOperator(object):
     :Create:  2022/1/13
     """
 
-    # 扩增算子名称
     @staticmethod
     def get_dop_method_arr():
         dop_method_arr = []

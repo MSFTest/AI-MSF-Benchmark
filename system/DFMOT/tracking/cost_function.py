@@ -174,14 +174,13 @@ def convert_3dbox_to_8corner(bbox3d_input):
     w = bbox3d[5]
     h = bbox3d[6]
 
-    # 3d bounding box corners  这是什么东西
     x_corners = [l / 2, l / 2, -l / 2, -l / 2, l / 2, l / 2, -l / 2, -l / 2];
     y_corners = [0, 0, 0, 0, -h, -h, -h, -h];
     z_corners = [w / 2, -w / 2, -w / 2, w / 2, w / 2, -w / 2, -w / 2, w / 2];
 
     # rotate and translate 3d bounding box
     corners_3d = np.dot(R, np.vstack(
-        [x_corners, y_corners, z_corners]))  # np.vstack([x_corners,y_corners,z_corners])   3*8按照竖直方向排列
+        [x_corners, y_corners, z_corners]))
     # print corners_3d.shape
     corners_3d[0, :] = corners_3d[0, :] + bbox3d[0]  # x
     corners_3d[1, :] = corners_3d[1, :] + bbox3d[1]  # y

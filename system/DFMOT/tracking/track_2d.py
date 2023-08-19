@@ -29,8 +29,8 @@ class Track_2D:
         self.state = TrackState.Tentative
         self.is3D_or_2D_track = TrackState3Dor2D.Tracking_2D  # 2D tracking
         self.time_since_update = 0
-        self.n_init = n_init    # 连续n_init帧被检测到，状态就被设为confirmed
-        self._max_age = max_age  # 一个跟踪对象丢失多少帧后会被删去（删去之后将不再进行特征匹配）
+        self.n_init = n_init
+        self._max_age = max_age
 
     def to_tlwh(self):
         """

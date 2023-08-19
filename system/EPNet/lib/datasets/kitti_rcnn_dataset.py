@@ -341,9 +341,13 @@ class KittiRCNNDataset(KittiDataset):
                         extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=False)
                         choice = np.concatenate((choice, extra_choice), axis=0)
                     else:
-                        print("self.npoints - len(pts_rect)", self.npoints - len(pts_rect), "choice", choice)
+                        print("self.npoints - len(pts_rect)", self.npoints - len(pts_rect), self.npoints, len(pts_rect),
+                              "choice", choice)
                 np.random.shuffle(choice)
-
+            if cfg.fid == True:
+                choice = np.arange(0, len(pts_rect), dtype=np.int32)
+                np.random.seed(0)
+                np.random.shuffle(choice)
             ret_pts_rect = pts_rect[choice, :]
             ret_pts_intensity = pts_intensity[choice] - 0.5  # translate intensity to [-0.5, 0.5]
             ret_pts_origin_xy = pts_origin_xy[choice, :]
@@ -439,7 +443,6 @@ class KittiRCNNDataset(KittiDataset):
         pts_intensity = pts_intensity[pts_valid_flag]
         pts_in_img = pts_img[pts_valid_flag]
 
-        # 在这里加上RGB信息。
         shape = self.image_hw_with_padding_np
         pts_rgb = interpolate_img_by_xy(img, pts_in_img, shape)
 

@@ -16,7 +16,7 @@ from jmodt.utils import train_utils
 
 parser = argparse.ArgumentParser(description="arg parser")
 parser.add_argument('--data_root', type=str, default='data/KITTI', help='specify the data root')
-parser.add_argument('--challenge', type=str, default='tracking', help='specify the KITTI benchmark')
+parser.add_argument('--challenge', type=str, default='tracking', help='specify the KITTI system')
 parser.add_argument('--finetune', action='store_false', help='whether to finetune the pretrained model')
 parser.add_argument("--batch_size", type=int, default=12, required=True, help="the batch size for training")
 parser.add_argument('--output_dir', type=str, default='output', help='specify an output directory if needed')

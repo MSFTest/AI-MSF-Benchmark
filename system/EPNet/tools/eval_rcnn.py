@@ -22,7 +22,6 @@ import time
 from tensorboardX import SummaryWriter
 import tqdm
 
-
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning, NumbaPerformanceWarning, \
     NumbaWarning
 import warnings
@@ -33,7 +32,6 @@ warnings.simplefilter('ignore', category=NumbaPerformanceWarning)
 warnings.simplefilter('ignore', category=NumbaWarning)
 warnings.simplefilter('ignore')
 warnings.filterwarnings('ignore')
-
 
 np.random.seed(1024)  # set the same seed
 
@@ -72,7 +70,7 @@ parser.add_argument('--set', dest='set_cfgs', default=None, nargs=argparse.REMAI
                     help='set extra config keys if needed')
 
 parser.add_argument('--model_type', type=str, default='base', help='model type')
-
+parser.add_argument('--fid', type=bool, default=False, help='cal features')
 args = parser.parse_args()
 
 
@@ -505,7 +503,7 @@ def eval_one_epoch_rcnn(model, dataloader, epoch_id, result_dir, logger):
     return ret_dict
 
 
-def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
+def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger, is_get_feature=False):
     np.random.seed(666)
     MEAN_SIZE = torch.from_numpy(cfg.CLS_MEAN_SIZE[0]).cuda()
     mode = 'TEST' if args.test else 'EVAL'
@@ -552,6 +550,13 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
             pts_rgb = data['rgb']
             pts_rgb = torch.from_numpy(pts_rgb).cuda(non_blocking=True).float()
             input_data['pts_rgb'] = pts_rgb
+
+        if is_get_feature:  # todo:
+            backbone_features = model.forward_features(input_data)
+            bp = "/home/niangao/disk1/_PycharmProjects/PycharmProjects/Multimodality/fusion_feature/temp"
+            p = os.path.join(bp, f"{cnt - 1}.npy")
+            np.save(p, backbone_features.cpu())
+            continue
 
         # model inference
         ret_dict = model(input_data)
@@ -746,16 +751,22 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
     if cfg.TEST.SPLIT != 'test':
         logger.info('Averate Precision:')
         name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2}
-        ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
-                                                current_class=name_to_class[cfg.CLASSES])
-        logger.info(ap_result_str)
-        ret_dict.update(ap_dict)
+        if len(dataloader) == 1:
+            print("data_num < 50 skip eval")
+        else:
+            ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
+                                                    current_class=name_to_class[cfg.CLASSES])
+            logger.info(ap_result_str)
+            ret_dict.update(ap_dict)
 
     logger.info('result is saved to: %s' % result_dir)
     return ret_dict
 
 
-def eval_one_epoch(model, dataloader, epoch_id, result_dir, logger):
+def eval_one_epoch(model, dataloader, epoch_id, result_dir, logger, is_get_feature=False):
+    if is_get_feature:
+        eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger, is_get_feature=True)
+        return None
     if cfg.RPN.ENABLED and not cfg.RCNN.ENABLED:
         ret_dict = eval_one_epoch_rpn(model, dataloader, epoch_id, result_dir, logger)
     elif not cfg.RPN.ENABLED and cfg.RCNN.ENABLED:
@@ -798,7 +809,7 @@ def load_ckpt_based_on_args(model, logger):
         load_part_ckpt(model, filename=args.rcnn_ckpt, logger=logger, total_keys=total_keys)
 
 
-def eval_single_ckpt(root_result_dir):
+def eval_single_ckpt(root_result_dir, is_get_feature=False):
     # print("=================================11111=================")
     root_result_dir = os.path.join(root_result_dir, 'eval')
     # set epoch_id and output dir
@@ -841,7 +852,7 @@ def eval_single_ckpt(root_result_dir):
     load_ckpt_based_on_args(model, logger)
 
     # start evaluation
-    eval_one_epoch(model, test_loader, epoch_id, root_result_dir, logger)
+    eval_one_epoch(model, test_loader, epoch_id, root_result_dir, logger, is_get_feature=is_get_feature)
 
 
 def get_no_evaluated_ckpt(ckpt_dir, ckpt_record_file):
@@ -937,7 +948,6 @@ def repeat_eval_ckpt(root_result_dir, ckpt_dir):
 def create_dataloader(logger):
     mode = 'TEST' if args.test else 'EVAL'
     DATA_PATH = os.path.join('../', 'data')
-
     # create dataloader
     test_set = KittiRCNNDataset(root_dir=DATA_PATH, npoints=cfg.RPN.NUM_POINTS, split=cfg.TEST.SPLIT, mode=mode,
                                 random_select=args.random_select,
@@ -945,7 +955,6 @@ def create_dataloader(logger):
                                 rcnn_eval_feature_dir=args.rcnn_eval_feature_dir,
                                 classes=cfg.CLASSES,
                                 logger=logger)
-
     test_loader = DataLoader(test_set, batch_size=args.batch_size, shuffle=False, pin_memory=True,
                              num_workers=args.workers, collate_fn=test_set.collate_batch)
 
@@ -954,6 +963,13 @@ def create_dataloader(logger):
 
 if __name__ == "__main__":
     # merge config and log to file
+    is_get_feature = args.fid
+    cfg.fid = False
+    if is_get_feature:
+        print(cfg.RPN.USE_INTENSITY, cfg.RPN.NUM_POINTS)
+        cfg.RPN.USE_INTENSITY = False
+        cfg.fid = True
+        print(cfg.RPN.USE_INTENSITY, cfg.fid)
     if args.cfg_file is not None:
         cfg_from_file(args.cfg_file)
     if args.set_cfgs is not None:
@@ -1000,4 +1016,4 @@ if __name__ == "__main__":
             assert os.path.exists(ckpt_dir), '%s' % ckpt_dir
             repeat_eval_ckpt(root_result_dir, ckpt_dir)
         else:
-            eval_single_ckpt(root_result_dir)
+            eval_single_ckpt(root_result_dir, is_get_feature=is_get_feature)

@@ -10,9 +10,9 @@
       - at this point the submitted files are located in results/<result_sha>/data
       - the results shall be saved as follows
         -> summary statistics of the method: results/<result_sha>/stats_task.txt
-           here task refers to the sub-benchmark (e.g., um_lane, uu_road etc.)
+           here task refers to the sub-system (e.g., um_lane, uu_road etc.)
            file contents: numbers for main table, format: %.6f (single space separated)
-           note: only files with successful sub-benchmark evaluation must be created
+           note: only files with successful sub-system evaluation must be created
         -> detailed results/graphics/plots: results/<result_sha>/subdir
            with appropriate subdir and file names (all subdir's need to be created)
 """
@@ -116,7 +116,7 @@ class TrackingEvaluation(object):
                  min_height=25, max_occlusion=2, cls="car"):
         # get number of sequences and
         # get number of frames per sequence from test mapping
-        # (created while extracting the benchmark)
+        # (created while extracting the system)
         self.n_frames = []
         self.sequence_name = []
         self.sequence_id = []
@@ -256,7 +256,7 @@ class TrackingEvaluation(object):
             n_in_seq = 0
             id_frame_cache = []
             for line in f:
-                # KITTI tracking benchmark data format:
+                # KITTI tracking system data format:
                 # (frame,tracklet_id,objectType,truncation,occlusion,alpha,x1,y1,x2,y2,h,w,l,X,Y,Z,ry)
                 line = line.strip()
                 fields = line.split(" ")
@@ -955,5 +955,5 @@ def evaluate(result_sha, result_root, part, gt_path, logger):
     if len(classes) == 0:
         logger.info("The uploaded results could not be evaluated. Check for format errors.")
         return False
-    logger.info("Thank you for participating in our benchmark!")
+    logger.info("Thank you for participating in our system!")
     return True

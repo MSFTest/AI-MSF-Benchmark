@@ -1,16 +1,18 @@
 import copy
 import pathlib
 import pickle
+import shutil
 
 import fire
 import numpy as np
 import random
-from math import sin,cos,atan2,sqrt
+from math import sin, cos, atan2, sqrt
 from skimage import io as imgio
 
 from second.core import box_np_ops
 from second.data import kitti_common as kitti
 from second.utils.progress_bar import list_bar as prog_bar
+
 
 def _read_imageset_file(path):
     with open(path, 'r') as f:
@@ -24,6 +26,7 @@ def _calculate_num_points_in_gt(data_path, infos, relative_path, remove_outside=
             v_path = str(pathlib.Path(data_path) / info["velodyne_path"])
         else:
             v_path = info["velodyne_path"]
+        print(v_path)
         points_v = np.fromfile(
             v_path, dtype=np.float32, count=-1).reshape([-1, num_features])
         rect = info['calib/R0_rect']
@@ -54,17 +57,23 @@ def _calculate_num_points_in_gt(data_path, infos, relative_path, remove_outside=
 
 def create_kitti_info_file(data_path,
                            save_path=None,
+                           imageset_path=None,
                            create_trainval=False,
                            relative_path=True):
     # train_img_ids = _read_imageset_file("./data/ImageSets/train.txt")
     # val_img_ids = _read_imageset_file("./data/ImageSets/val.txt")
     # trainval_img_ids = _read_imageset_file("./data/ImageSets/trainval.txt")
     # test_img_ids = _read_imageset_file("./data/ImageSets/test.txt")
-
-    train_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/train.txt")
-    val_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/val.txt")
-    trainval_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/trainval.txt")
-    test_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/test.txt")
+    if imageset_path is not None:
+        train_img_ids = _read_imageset_file(f"{imageset_path}/train.txt")
+        val_img_ids = _read_imageset_file(f"{imageset_path}/val.txt")
+        trainval_img_ids = _read_imageset_file(f"{imageset_path}/trainval.txt")
+        test_img_ids = _read_imageset_file(f"{imageset_path}/test.txt")
+    else:
+        train_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/train.txt")
+        val_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/val.txt")
+        trainval_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/trainval.txt")
+        test_img_ids = _read_imageset_file("./CLOCs/second/data/ImageSets/test.txt")
 
     print("Generate info. this may take several minutes.")
     if save_path is None:
@@ -90,7 +99,11 @@ def create_kitti_info_file(data_path,
         calib=True,
         image_ids=val_img_ids,
         relative_path=relative_path)
-    _calculate_num_points_in_gt(data_path, kitti_infos_val, relative_path)
+    try:
+        _calculate_num_points_in_gt(data_path, kitti_infos_val, relative_path)
+    except:
+        print(data_path)
+        assert 1==2
     filename = save_path / 'kitti_infos_val.pkl'
     print(f"Kitti info val file is saved to {filename}")
     with open(filename, 'wb') as f:
@@ -113,10 +126,11 @@ def create_kitti_info_file(data_path,
     with open(filename, 'wb') as f:
         pickle.dump(kitti_infos_test, f)
 
+
 def create_kitti_info_file_only_test(data_path,
-                           save_path=None,
-                           create_trainval=False,
-                           relative_path=True):
+                                     save_path=None,
+                                     create_trainval=False,
+                                     relative_path=True):
     test_img_ids = _read_imageset_file("./data/ImageSets/test.txt")
 
     print("Generate info. this may take several minutes.")
@@ -136,6 +150,7 @@ def create_kitti_info_file_only_test(data_path,
     print(f"Kitti info test file is saved to {filename}")
     with open(filename, 'wb') as f:
         pickle.dump(kitti_infos_test, f)
+
 
 def _create_reduced_point_cloud(data_path,
                                 info_path,
@@ -174,9 +189,9 @@ def _create_reduced_point_cloud(data_path,
 
 
 def _create_noised_point_cloud(data_path,
-                                info_path,
-                                save_path=None,
-                                back=False):
+                               info_path,
+                               save_path=None,
+                               back=False):
     with open(info_path, 'rb') as f:
         kitti_infos = pickle.load(f)
     for info in prog_bar(kitti_infos):
@@ -184,26 +199,26 @@ def _create_noised_point_cloud(data_path,
         v_path = pathlib.Path(data_path) / v_path
         points_v = np.fromfile(
             str(v_path), dtype=np.float32, count=-1).reshape([-1, 4])
-        #rect = info['calib/R0_rect']
-        #P2 = info['calib/P2']
-        #Trv2c = info['calib/Tr_velo_to_cam']
+        # rect = info['calib/R0_rect']
+        # P2 = info['calib/P2']
+        # Trv2c = info['calib/Tr_velo_to_cam']
         # first remove z < 0 points
         # keep = points_v[:, -1] > 0
         # points_v = points_v[keep]
         # then remove outside.
         if back:
             points_v[:, 0] = -points_v[:, 0]
-        #points_v = box_np_ops.remove_outside_points(points_v, rect, Trv2c, P2,
-                                                    #info["img_shape"])
-        for i,p in enumerate(points_v[:,:3]):
-            #print(i,p)
-            noise = random.uniform(-0.05,0.05)
-            alpha = atan2(p[2],sqrt(p[0]**2+p[1]**2))
-            beta = atan2(p[1],p[0])
-            p[2] = p[2] + noise*sin(alpha)
-            p[1] = p[1] + noise*cos(alpha)*sin(beta)
-            p[0] = p[0] + noise*cos(alpha)*cos(beta)
-            points_v[i,:3] = p[:3]
+        # points_v = box_np_ops.remove_outside_points(points_v, rect, Trv2c, P2,
+        # info["img_shape"])
+        for i, p in enumerate(points_v[:, :3]):
+            # print(i,p)
+            noise = random.uniform(-0.05, 0.05)
+            alpha = atan2(p[2], sqrt(p[0] ** 2 + p[1] ** 2))
+            beta = atan2(p[1], p[0])
+            p[2] = p[2] + noise * sin(alpha)
+            p[1] = p[1] + noise * cos(alpha) * sin(beta)
+            p[0] = p[0] + noise * cos(alpha) * cos(beta)
+            points_v[i, :3] = p[:3]
         if save_path is None:
             save_filename = v_path.parent.parent / (v_path.parent.stem + "_noised") / v_path.name
             # save_filename = str(v_path) + '_reduced'
@@ -216,12 +231,13 @@ def _create_noised_point_cloud(data_path,
         with open(save_filename, 'w') as f:
             points_v.tofile(f)
 
+
 def create_noised_point_cloud(data_path,
-                               train_info_path=None,
-                               val_info_path=None,
-                               test_info_path=None,
-                               save_path=None,
-                               with_back=False):
+                              train_info_path=None,
+                              val_info_path=None,
+                              test_info_path=None,
+                              save_path=None,
+                              with_back=False):
     if train_info_path is None:
         train_info_path = pathlib.Path(data_path) / 'kitti_infos_train.pkl'
     if val_info_path is None:
@@ -231,15 +247,15 @@ def create_noised_point_cloud(data_path,
 
     _create_noised_point_cloud(data_path, train_info_path, save_path)
     _create_noised_point_cloud(data_path, val_info_path, save_path)
-    #_create_noised_point_cloud(data_path, test_info_path, save_path)
+    # _create_noised_point_cloud(data_path, test_info_path, save_path)
 
     if with_back:
         _create_noised_point_cloud(
             data_path, train_info_path, save_path, back=True)
         _create_noised_point_cloud(
             data_path, val_info_path, save_path, back=True)
-        #_create_noised_point_cloud(
-            #data_path, test_info_path, save_path, back=True)
+        # _create_noised_point_cloud(
+        # data_path, test_info_path, save_path, back=True)
 
 
 def create_reduced_point_cloud(data_path,
@@ -266,12 +282,13 @@ def create_reduced_point_cloud(data_path,
         _create_reduced_point_cloud(
             data_path, test_info_path, save_path, back=True)
 
+
 def create_reduced_point_cloud_only_test(data_path,
-                               train_info_path=None,
-                               val_info_path=None,
-                               test_info_path=None,
-                               save_path=None,
-                               with_back=False):
+                                         train_info_path=None,
+                                         val_info_path=None,
+                                         test_info_path=None,
+                                         save_path=None,
+                                         with_back=False):
     test_info_path = pathlib.Path(data_path) / 'kitti_infos_test.pkl'
     _create_reduced_point_cloud(data_path, test_info_path, save_path)
 
@@ -294,6 +311,8 @@ def create_groundtruth_database(data_path,
         database_save_path = pathlib.Path(database_save_path)
     if db_info_save_path is None:
         db_info_save_path = root_path / "kitti_dbinfos_train.pkl"
+    if database_save_path.exists():
+        shutil.rmtree(database_save_path)
     database_save_path.mkdir(parents=True, exist_ok=True)
     with open(info_path, 'rb') as f:
         kitti_infos = pickle.load(f)
@@ -321,7 +340,7 @@ def create_groundtruth_database(data_path,
         Trv2c = info['calib/Tr_velo_to_cam']
         if not lidar_only:
             points = box_np_ops.remove_outside_points(points, rect, Trv2c, P2,
-                                                        info["img_shape"])
+                                                      info["img_shape"])
 
         annos = info["annos"]
         names = annos["name"]
@@ -331,7 +350,7 @@ def create_groundtruth_database(data_path,
         num_obj = np.sum(annos["index"] >= 0)
         rbbox_cam = kitti.anno_to_rbboxes(annos)[:num_obj]
         rbbox_lidar = box_np_ops.box_camera_to_lidar(rbbox_cam, rect, Trv2c)
-        if bev_only: # set z and h to limits
+        if bev_only:  # set z and h to limits
             assert coors_range is not None
             rbbox_lidar[:, 2] = coors_range[2]
             rbbox_lidar[:, 5] = coors_range[5] - coors_range[2]
