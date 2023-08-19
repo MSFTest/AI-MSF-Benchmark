@@ -4,7 +4,7 @@ This repository provides the code of the paper "**An Empirical Study of AI-enabl
 
 [[website]](https://sites.google.com/view/ai-msf-benchmark/)
 
-![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/workflow.png)
+![](https://github.com/MSFTest/AI-MSF-benchmark/blob/master/src/workflow.png)
 
 **AI-enabled MSF systems**.
 we summarizes the seven MSF systems used in our benchmark in this [link](https://sites.google.com/view/ai-msf-benchmark/benchmark).
@@ -16,7 +16,7 @@ these corruption patterns can be naturally grouped into four categories: weather
 we visualize the corruption patterns in this [link](https://sites.google.com/view/ai-msf-benchmark/corruption-pattern).
 
 
-![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/rain.gif)
+![](https://github.com/MSFTest/AI-MSF-benchmark/blob/master/src/rain.gif)
 
 
 ## Installation
@@ -136,7 +136,7 @@ Generate the 2D front view images of rgb images.
 3. Run `tools/aggerate_bounding_box.py` to aggregate guidance from different branch.
 
 ## Results
-![](https://github.com/853108389/AI-MSF-benchmark/blob/master/src/RQ1_radar.png)
+![](https://github.com/MSFTest/AI-MSF-benchmark/blob/master/src/RQ1_radar.png)
 
 ## Citation
 
