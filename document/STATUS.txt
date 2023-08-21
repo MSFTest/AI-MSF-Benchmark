@@ -1,0 +1,9 @@
+1. Functional badge
+The paper can be reproduced with this artifact.
+
+2. Reusable badge
+We provide well-structured code and corresponding example documentation to facilitate reuse.
+
+3. Available badge
+The artifacts relevant to this paper have been placed on a publically accessible persistent repository.
+
