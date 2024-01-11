@@ -143,7 +143,17 @@ Generate the 2D front view images of rgb images.
 Please cite the following paper if `AI-MSF-Benchmark` helps you on the research:
 
 ```
-
+@inproceedings{10.1145/3611643.3616278,
+author = {Gao, Xinyu and Wang, Zhijie and Feng, Yang and Ma, Lei and Chen, Zhenyu and Xu, Baowen},
+title = {Benchmarking Robustness of AI-Enabled Multi-Sensor Fusion Systems: Challenges and Opportunities},
+year = {2023},
+doi = {10.1145/3611643.3616278},
+booktitle = {Proceedings of the 31st ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+pages = {871–882},
+numpages = {12},
+series = {ESEC/FSE 2023},
+publisher = {Association for Computing Machinery},
+}
 ```
 
 
