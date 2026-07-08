@@ -1,11 +1,13 @@
 # AI-MSF-Benchmark
 
-This repository provides the code of the paper "**Benchmarking Robustness of AI-enabled Multi-sensor Fusion Systems: Challenges and Opportunities**"
-
-[[website]](https://sites.google.com/view/ai-msf-benchmark/)
+This repository provides the code of the paper "**Benchmarking Robustness of AI-enabled Multi-sensor Fusion Systems: Challenges and Opportunities**" [[website]](https://sites.google.com/view/ai-msf-benchmark/)
 
 ![](https://github.com/MSFTest/AI-MSF-benchmark/blob/master/src/workflow.png)
 
+## News
+**2026-07-08**: 🚀 We have published [OpenFusion](https://github.com/MSFTest/OpenFusion), a dedicated, operatorized multimodal fusion library that provides comprehensive support and pre-trained weights for multiple mainstream fusion perception models (e.g., **BEVFusion**, **CLOCs**, **HMFI**, and **LoGoNet**). Check it out! ⭐
+
+## Benchmark
 **AI-enabled MSF systems**.
 we summarizes the seven MSF systems used in our benchmark in this [link](https://sites.google.com/view/ai-msf-benchmark/benchmark).
 These seven systems cover three different tasks and three different fusion mechanisms
